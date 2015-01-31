@@ -84,8 +84,7 @@ def down_heapify(L, i,heap_places):
         if L[i] > L[left(i)]:
             # if it fail, swap, fixing i and its child (a leaf)
             heap_places[L[i][1]],heap_places[L[left(i)][1]] = left(i),i
-            (L[i], L[left(i)]) = (L[left(i)], L[i])
-            
+            (L[i], L[left(i)]) = (L[left(i)], L[i])      
         return
     # if i has two children...
     # check heap property
@@ -108,9 +107,7 @@ def up_heapify(L, i,heap_places):
     if i == 0 or L[parent(i)] <= L[i]:
         return
     heap_places[L[i][1]],heap_places[L[parent(i)][1]] = parent(i),i
-    swap = L[i]
-    L[i] = L[parent(i)]
-    L[parent(i)] = swap
+    L[i], L[parent(i)] = L[i], L[parent(i)]  
     return up_heapify(L,parent(i),heap_places)
         
 def parent(i): 
