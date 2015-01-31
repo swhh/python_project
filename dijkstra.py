@@ -107,7 +107,7 @@ def up_heapify(L, i,heap_places):
     if i == 0 or L[parent(i)] <= L[i]:
         return
     heap_places[L[i][1]],heap_places[L[parent(i)][1]] = parent(i),i
-    L[i], L[parent(i)] = L[i], L[parent(i)]  
+    L[parent(i)],L[i] = L[i], L[parent(i)]  
     return up_heapify(L,parent(i),heap_places)
         
 def parent(i): 
