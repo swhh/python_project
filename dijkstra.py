@@ -8,11 +8,7 @@
 # 
 
 def shortest_dist_node(heap,heap_places):
-    try: 
-       print 'garbage'
-       best_node = heap[0][1]
-    except IndexError:
-       print heap
+    best_node = heap[0][1]
     del heap_places[best_node]
     if len(heap) == 1:
         heap.pop()
@@ -28,7 +24,8 @@ def dijkstra(G,v):
     heap = [(0,v)]
     heap_places = {v:0}
     final_dist = {}
-    while len(heap)>0:
+    node_predecessor = {}
+    while len(heap) !=0:
         w,heap = shortest_dist_node(heap,heap_places)
         # lock it down!
         final_dist[w] = dist_so_far[w]
@@ -37,15 +34,17 @@ def dijkstra(G,v):
             if x not in final_dist:
                 if x not in dist_so_far:
                     dist_so_far[x] = final_dist[w] + G[w][x]
+                    node_predecessor[x] = w
                     heap.append((dist_so_far[x],x))
                     heap_places[x] = len(heap)-1
                     up_heapify(heap,len(heap)-1,heap_places)
                 elif final_dist[w] + G[w][x] < dist_so_far[x]:
                     index = heap_places[x] 
                     dist_so_far[x] = final_dist[w] + G[w][x]
+                    node_predecessor[x] = w
                     heap[index] = (dist_so_far[x],x)
                     up_heapify(heap,index,heap_places)
-    return final_dist
+    return final_dist, node_predecessor
 
 ############
 # 
@@ -88,8 +87,7 @@ def down_heapify(L, i,heap_places):
         if L[i] > L[left(i)]:
             # if it fail, swap, fixing i and its child (a leaf)
             heap_places[L[i][1]],heap_places[L[left(i)][1]] = left(i),i
-            (L[i], L[left(i)]) = (L[left(i)], L[i])
-            
+            (L[i], L[left(i)]) = (L[left(i)], L[i])      
         return
     # if i has two children...
     # check heap property
@@ -112,9 +110,7 @@ def up_heapify(L, i,heap_places):
     if i == 0 or L[parent(i)] <= L[i]:
         return
     heap_places[L[i][1]],heap_places[L[parent(i)][1]] = parent(i),i
-    swap = L[i]
-    L[i] = L[parent(i)]
-    L[parent(i)] = swap
+    L[parent(i)],L[i] = L[i], L[parent(i)]  
     return up_heapify(L,parent(i),heap_places)
         
 def parent(i): 
@@ -128,4 +124,4 @@ def leaf(L,i):
 def one_child(L,i): 
     return (left(i) < len(L)) and (right(i) >= len(L))
 
-
+#test()
