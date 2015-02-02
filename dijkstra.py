@@ -8,7 +8,11 @@
 # 
 
 def shortest_dist_node(heap,heap_places):
-    best_node = heap[0][1]
+    try: 
+       print 'garbage'
+       best_node = heap[0][1]
+    except IndexError:
+       print heap
     del heap_places[best_node]
     if len(heap) == 1:
         heap.pop()
@@ -24,7 +28,7 @@ def dijkstra(G,v):
     heap = [(0,v)]
     heap_places = {v:0}
     final_dist = {}
-    while len(final_dist) < len(G):
+    while len(heap)>0:
         w,heap = shortest_dist_node(heap,heap_places)
         # lock it down!
         final_dist[w] = dist_so_far[w]
@@ -84,7 +88,8 @@ def down_heapify(L, i,heap_places):
         if L[i] > L[left(i)]:
             # if it fail, swap, fixing i and its child (a leaf)
             heap_places[L[i][1]],heap_places[L[left(i)][1]] = left(i),i
-            (L[i], L[left(i)]) = (L[left(i)], L[i])      
+            (L[i], L[left(i)]) = (L[left(i)], L[i])
+            
         return
     # if i has two children...
     # check heap property
@@ -107,7 +112,9 @@ def up_heapify(L, i,heap_places):
     if i == 0 or L[parent(i)] <= L[i]:
         return
     heap_places[L[i][1]],heap_places[L[parent(i)][1]] = parent(i),i
-    L[parent(i)],L[i] = L[i], L[parent(i)]  
+    swap = L[i]
+    L[i] = L[parent(i)]
+    L[parent(i)] = swap
     return up_heapify(L,parent(i),heap_places)
         
 def parent(i): 
@@ -121,4 +128,4 @@ def leaf(L,i):
 def one_child(L,i): 
     return (left(i) < len(L)) and (right(i) >= len(L))
 
-test()
+
